@@ -1,7 +1,58 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+  // * 添加ts校验范围
+  "include": [
+    "mock/*.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "types/*.d.ts",
+    "vite.config.ts"
+  ],
+  // * 排除相关目录",
+  "exclude": ["dist", "**/*.js", "node_modules"],
+  // * ts编译选项, 大部分配置都在这里"
+  "compilerOptions": {
+    // * 编译目标: es3 es5 es6...
+    "target": "ESNext",
+    // * 模块系统 amd cmd es...
+    "module": "ESNext",
+    // * 模块解析策略
+    "moduleResolution": "Bundler",
+    // * 严格类型检查, 关闭单独指定更好
+    "strict": false,
+    // * 对于jsx文件打包策略
+    "jsx": "preserve",
+    // * 避免重复导入降级代码
+    "importHelpers": true,
+    // * 装饰器启用
+    "experimentalDecorators": true,
+    // * 关闭函数参数检查
+    "strictFunctionTypes": false,
+    // * 跳过声明文件的类型检查, 主要是跳过依赖的
+    "skipLibCheck": true,
+    // * 纠正某些包模块解析,提供polyfill纠正
+    "esModuleInterop": true,
+    // * 允许合成默认导出, (和上一个配置有关)
+    "allowSyntheticDefaultImports": true,
+    // * 隔离模块类型声明，详细看文档
+    "isolatedModules": true,
+    // * 严格区分路径大小写
+    "forceConsistentCasingInFileNames": true,
+    // * 方便调试报错定位到源代码
+    "sourceMap": true,
+    // * 模块解析基地址(就是没有路径的包,从哪儿开始找)
+    "baseUrl": ".",
+    // * 是否允许导入js文件
+    "allowJs": false,
+    // * 允许导入并解析.json模块
+    "resolveJsonModule": true,
+    // * ts 自带类型
+    "lib": ["ESNext", "DOM"],
+    // * 告诉ts如何解析自定义路径
+    "paths": { "@/*": ["src/*"], "@build/*": ["build/*"] },
+    // * 指定全局范围所拥有的类型包
+    "types": ["node", "vite/client","element-plus/global"],
+    // * 支持类字段, ts有但是js没有的, 作为类型判断
+    "useDefineForClassFields": true
+  }
 }

@@ -1,30 +1,38 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+<script lang="ts">
+import { checkVersion } from "version-rocket";
+import { defineComponent } from "vue";
+import { ElConfigProvider } from "element-plus";
+
+export default defineComponent({
+  name: "app",
+  components: {
+    [ElConfigProvider.name]: ElConfigProvider,
+  },
+  beforeCreate() {
+    const { version, name: title } = __APP_INFO__.pkg;
+    const { VITE_PUBLIC_PATH, MODE } = import.meta.env;
+    if (MODE === "production") {
+      // 版本实时更新检测, 只作用于线上环境
+      checkVersion(
+        {
+          pollingTime: 300000,
+          immediate: true,
+          localPackageVersion: version,
+          originVersionFileUrl: `${location.origin}${VITE_PUBLIC_PATH}version.json`,
+        },
+        {
+          title,
+          description: "检测到新版本",
+          buttonText: "立即更新",
+        }
+      );
+    }
+  },
+});
 </script>
 
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+  <el-config-provider>
+    <router-view />
+  </el-config-provider>
 </template>
-
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
